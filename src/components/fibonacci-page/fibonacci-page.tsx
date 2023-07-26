@@ -3,6 +3,7 @@ import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
+import {generateFibonacciSequences} from "./utils";
 
 export const FibonacciPage: React.FC = () => {
     const [numberValue, setNumberValue] = useState<number | undefined>(undefined);
@@ -19,25 +20,6 @@ export const FibonacciPage: React.FC = () => {
             setNumberValue(numberValue);
             setIsValidInput(false);
         }
-    };
-
-    const generateFibonacciSequences = (n: number | undefined): string[][] => {
-        if (n === undefined) return [];
-
-        const outputArray: string[][] = [];
-        const sequence: number[] = [];
-
-        for (let i = 0; i < 2; i++) {
-            sequence.push(1);
-            outputArray.push(sequence.map((num) => num.toString()));
-        }
-
-        for (let i = 2; i <= n; i++) {
-            sequence.push(sequence[i - 1] + sequence[i - 2]);
-            outputArray.push(sequence.map((num) => num.toString()));
-        }
-
-        return outputArray;
     };
 
     const fibonacciAnimation = () => {

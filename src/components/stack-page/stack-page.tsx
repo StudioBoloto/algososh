@@ -1,51 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {ElementStates} from "../../types/element-states";
-
-interface IStack<T> {
-    push: (item: T | undefined) => void;
-    pop: () => void;
-    peak: () => T | null;
-}
-
-class Stack<T> implements IStack<T> {
-    private data: T[] = [];
-
-    push(item: T | undefined) {
-        if (item)
-        this.data.push(item);
-    }
-
-    pop() {
-        this.data.pop();
-    }
-
-    peak(): T | null {
-        if (this.data.length === 0) {
-            return null;
-        }
-        return this.data[this.data.length - 1];
-    }
-
-    clear() {
-        this.data = [];
-    }
-
-    size(): number {
-        return this.data.length;
-    }
-
-    empty(): boolean {
-        return this.data.length === 0;
-    }
-
-    items() {
-        return this.data;
-    }
-}
+import {handleClearStack, handlePopStack, handlePushStack, Stack} from "./utils";
 
 export const StackPage: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -57,10 +16,6 @@ export const StackPage: React.FC = () => {
 
     const [circleStates, setCircleStates] = useState<ElementStates[]>([]);
     const [outputArray, setOutputArray] = useState<number[]>([]);
-    const [outputArrays, setOutputArrays] = useState<number[][]>([]);
-    const [animationStates, setAnimationStates] = useState<ElementStates[][]>([]);
-
-    useEffect(() => {}, [animationStates, outputArrays]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;
@@ -75,66 +30,29 @@ export const StackPage: React.FC = () => {
     };
 
     const handlePush = () => {
-        if (stackRef.current.size() > 10) return;
+        const [updatedAnimationStates, updatedOutputArrays]
+            = handlePushStack(numberValue!, stackRef, setStack, setIsEmpty) as [ElementStates[][], number[][]];
 
         setInputValue("");
         setIsValidInput(false);
 
-        stackRef.current.push(numberValue);
-        setStack(new Stack<number>());
-        setIsEmpty(stackRef.current.empty());
-
-        const items = stackRef.current.items();
-
-        outputArrays.push(items);
-        outputArrays.push(items);
-
-        const stepStates = items.map((_, index) =>
-            (index === items.length - 1 ? ElementStates.Changing : ElementStates.Default));
-
-        animationStates.push(stepStates);
-        animationStates.push(Array(items.length).fill(ElementStates.Default));
-
-        setAnimationStates(animationStates);
-        setOutputArrays(outputArrays);
-        animate();
+        animate(updatedAnimationStates, updatedOutputArrays);
     };
 
     const handlePop = () => {
-        let currentItems = stackRef.current.items();
-        outputArrays.push(currentItems.slice());
+        const [updatedAnimationStates, updatedOutputArrays]
+            = handlePopStack(stackRef, setStack, setIsEmpty) as [ElementStates[][], number[][]];
 
-        const stepStates = currentItems.map((_, index) =>
-            (index === currentItems.length - 1 ? ElementStates.Changing : ElementStates.Default));
-        animationStates.push(stepStates);
-
-        stackRef.current.pop();
-        setStack(new Stack<number>());
-        setIsEmpty(stackRef.current.empty());
-
-        currentItems = stackRef.current.items();
-        outputArrays.push(currentItems);
-        animationStates.push(Array(currentItems.length).fill(ElementStates.Default));
-
-        setAnimationStates(animationStates);
-        setOutputArrays(outputArrays);
-        animate();
+        animate(updatedAnimationStates, updatedOutputArrays);
     };
 
-    // const handlePeak = () => {
-    //     const topElement = stackRef.current.peak();
-    //     console.log("Top element:", topElement);
-    // };
-
     const handleClear = () => {
-        stackRef.current.clear();
-        setStack(new Stack<number>());
-        setIsEmpty(stackRef.current.empty());
+        handleClearStack(stackRef, setStack, setIsEmpty);
         setCircleStates([]);
         setOutputArray([]);
     };
 
-    const animate = () => {
+    const animate = (animationStates: ElementStates[][], outputArrays: number[][]) => {
         let delay = 0;
         animationStates.forEach((stepStates, index) => {
             setTimeout(() => {
@@ -143,8 +61,6 @@ export const StackPage: React.FC = () => {
             }, delay);
             delay += 500;
         });
-        setAnimationStates([]);
-        setOutputArrays([]);
     };
 
     return (

@@ -4,12 +4,12 @@ import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {ElementStates} from "../../types/element-states";
+import {getReversingStringSteps} from "./utils";
 
 export const StringComponent: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
     const [isValidInput, setIsValidInput] = useState(false);
     const [circleStates, setCircleStates] = useState<ElementStates[]>([]);
-    const defaultStep = Array(inputValue.length).fill(ElementStates.Default);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value.length > 0) {
@@ -22,41 +22,7 @@ export const StringComponent: React.FC = () => {
     };
 
     const reverseAnimation = () => {
-        const inputArray: string[] = inputValue.split("");
-        const outputArray: string[][] = [];
-        const animationStates: ElementStates[][] = [];
-        let stepStates = [...circleStates];
-
-        for (let i = 0; i < inputArray.length / 2; i++) {
-            if (animationStates.length > 0) {
-                stepStates = [...animationStates[animationStates.length - 1]];
-                stepStates.forEach((state, index) => {
-                    if (state === ElementStates.Changing) {
-                        stepStates[index] = ElementStates.Modified;
-                    }
-                });
-            }
-
-            stepStates[i] = ElementStates.Changing;
-            stepStates[inputArray.length - 1 - i] = ElementStates.Changing;
-
-            [inputArray[i], inputArray[inputArray.length - 1 - i]] = [
-                inputArray[inputArray.length - 1 - i],
-                inputArray[i],
-            ];
-
-            outputArray.push(inputArray.slice());
-            animationStates.push(stepStates);
-        }
-
-        stepStates.forEach((state, index) => {
-            if (state === ElementStates.Changing) {
-                stepStates[index] = ElementStates.Modified;
-            }
-        });
-
-        animationStates.push(defaultStep);
-        outputArray.push(inputArray.slice());
+        const [animationStates, outputArray] = getReversingStringSteps(inputValue) as [ElementStates[][], string[][]];
 
         let delay = 0;
         animationStates.forEach((stepStates, index) => {
