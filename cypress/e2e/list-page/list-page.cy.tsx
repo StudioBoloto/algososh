@@ -1,102 +1,112 @@
 /// <reference types="cypress" />
+import {SHORT_DELAY_IN_MS} from "../../../src/constants/delays";
+import {
+    buttonAddHeadSelector,
+    buttonAddIndexSelector,
+    buttonAddTailSelector,
+    buttonDeleteHeadSelector,
+    buttonDeleteIndexSelector,
+    buttonDeleteTailSelector, circleCircleSelector,
+    circleContentSelector,
+    circleDefaultSelector, circleModifiedSelector,
+    inputIndexSelector,
+    inputSelector
+} from "../../../src/constants/selectors";
+
 export {};
 
 describe('ListPage e2e testing', () => {
     it('should disable buttons when inputs are empty', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
 
-        cy.get('[data-testid="button-add-head"]').should('be.disabled');
-        cy.get('[data-testid="button-add-tail"]').should('be.disabled');
-        cy.get('[data-testid="button-add-index"]').should('be.disabled');
-        cy.get('[data-testid="button-delete-index"]').should('be.disabled');
-        cy.get('[data-testid="button-delete-head"]').should('be.disabled');
-        cy.get('[data-testid="button-delete-tail"]').should('be.disabled');
+        cy.get(buttonAddHeadSelector).should('be.disabled');
+        cy.get(buttonAddTailSelector).should('be.disabled');
+        cy.get(buttonAddIndexSelector).should('be.disabled');
+        cy.get(buttonDeleteIndexSelector).should('be.disabled');
+        cy.get(buttonDeleteHeadSelector).should('be.disabled');
+        cy.get(buttonDeleteTailSelector).should('be.disabled');
 
-        cy.get('[data-testid="input"]').type('1');
+        cy.get(inputSelector).type('1');
 
-        cy.get('[data-testid="button-add-head"]').should('not.be.disabled');
-        cy.get('[data-testid="button-add-tail"]').should('not.be.disabled');
-        cy.get('[data-testid="button-add-index"]').should('be.disabled');
+        cy.get(buttonAddHeadSelector).should('not.be.disabled');
+        cy.get(buttonAddTailSelector).should('not.be.disabled');
+        cy.get(buttonAddIndexSelector).should('be.disabled');
 
-        cy.get('[data-testid="button-add-head"]').click();
-        cy.get('[data-testid="button-add-head"]').should('be.disabled');
-        cy.get('[data-testid="button-add-tail"]').should('be.disabled');
-        cy.get('[data-testid="button-add-index"]').should('be.disabled');
-        cy.get('[data-testid="button-delete-index"]').should('be.disabled');
-        cy.get('[data-testid="button-delete-head"]').should('not.be.disabled');
-        cy.get('[data-testid="button-delete-tail"]').should('not.be.disabled');
+        cy.get(buttonAddHeadSelector).click();
+        cy.get(buttonAddHeadSelector).should('be.disabled');
+        cy.get(buttonAddTailSelector).should('be.disabled');
+        cy.get(buttonAddIndexSelector).should('be.disabled');
+        cy.get(buttonDeleteIndexSelector).should('be.disabled');
+        cy.get(buttonDeleteHeadSelector).should('not.be.disabled');
+        cy.get(buttonDeleteTailSelector).should('not.be.disabled');
 
-        cy.get('[data-testid="input"]').type('1');
-        cy.get('[data-testid="input-index"]').type('0');
+        cy.get(inputSelector).type('1');
+        cy.get(inputIndexSelector).type('0');
 
-        cy.get('[data-testid="button-add-head"]').should('not.be.disabled');
-        cy.get('[data-testid="button-add-tail"]').should('not.be.disabled');
-        cy.get('[data-testid="button-add-index"]').should('not.be.disabled');
-        cy.get('[data-testid="button-add-index"]').click();
+        cy.get(buttonAddHeadSelector).should('not.be.disabled');
+        cy.get(buttonAddTailSelector).should('not.be.disabled');
+        cy.get(buttonAddIndexSelector).should('not.be.disabled');
+        cy.get(buttonAddIndexSelector).click();
     });
 
     it('should render default list correctly', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
         const inputValues: string[] = ['1', '2', '3', '4'];
 
         for (let i = 0; i < inputValues.length; ++i) {
-            cy.get('[data-testid="input"]').type((i + 1).toString());
-            cy.get('[data-testid="button-add-head"]').click();
+            cy.get(inputSelector).type((i + 1).toString());
+            cy.get(buttonAddHeadSelector).click();
         }
 
-        cy.get('[class*=circle_content]').should('contain', 'head');
-        cy.get('[class*=circle_content]').should('contain', 'tail');
+        cy.get(circleContentSelector).should('contain', 'head');
+        cy.get(circleContentSelector).should('contain', 'tail');
     });
 
     it('should add to head correctly', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
 
-        cy.get('[data-testid="input"]').type('1');
-        cy.get('[data-testid="button-add-head"]').click();
-        cy.get('[class*=circle_content]').should('contain', 'head');
-        cy.get('[class*=circle_modified]').contains('1');
+        cy.get(inputSelector).type('1');
+        cy.get(buttonAddHeadSelector).click();
+        cy.get(circleContentSelector).should('contain', 'head');
+        cy.get(circleModifiedSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class*=circle_content]').should('have.length', 3);
-        cy.get('[class*=circle_default]').contains('1');
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleContentSelector).should('have.length', 3);
+        cy.get(circleDefaultSelector).contains('1');
     });
 
     it('should add to tail correctly', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
 
-        cy.get('[data-testid="input"]').type('1');
-        cy.get('[data-testid="button-add-tail"]').click();
-        cy.get('[class*=circle_content]').should('contain', 'tail');
-        cy.get('[class*=circle_modified]').contains('1');
+        cy.get(inputSelector).type('1');
+        cy.get(buttonAddTailSelector).click();
+        cy.get(circleContentSelector).should('contain', 'tail');
+        cy.get(circleModifiedSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class*=circle_content]').should('have.length', 3);
-        cy.get('[class*=circle_default]').contains('1');
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleContentSelector).should('have.length', 3);
+        cy.get(circleDefaultSelector).contains('1');
     });
 
     it('should add by index correctly', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
 
-        cy.get('[data-testid="input"]').type('1');
-        cy.get('[data-testid="button-add-head"]').click();
+        cy.get(inputSelector).type('1');
+        cy.get(buttonAddHeadSelector).click();
 
-        cy.get('[data-testid="input"]').type('2');
-        cy.get('[data-testid="input-index"]').type('0');
-        cy.get('[data-testid="button-add-index"]').click();
-        cy.get('[class*=circle_content]').should('contain', 'head');
-        cy.get('[class*=circle_modified]').contains('1');
+        cy.get(inputSelector).type('2');
+        cy.get(inputIndexSelector).type('0');
+        cy.get(buttonAddIndexSelector).click();
+        cy.get(circleContentSelector).should('contain', 'head');
+        cy.get(circleModifiedSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class*=circle_content]').should('have.length', 3);
-        cy.get('[class*=circle_default]').contains('1');
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleContentSelector).should('have.length', 3);
+        cy.get(circleDefaultSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
+        cy.wait(SHORT_DELAY_IN_MS);
 
-        cy.get('[class*=circle_content]')
+        cy.get(circleContentSelector)
             .should('have.length', 5)
             .each((el, index) => {
                 index === 2 && expect(el).contain('2');
@@ -105,80 +115,74 @@ describe('ListPage e2e testing', () => {
     });
 
     it('should delete from head correctly', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
 
-        cy.get('[data-testid="input"]').type('1');
-        cy.get('[data-testid="button-add-head"]').click();
-        cy.get('[class*=circle_content]').should('contain', 'head');
-        cy.get('[class*=circle_modified]').contains('1');
+        cy.get(inputSelector).type('1');
+        cy.get(buttonAddHeadSelector).click();
+        cy.get(circleContentSelector).should('contain', 'head');
+        cy.get(circleModifiedSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class*=circle_content]').should('have.length', 3);
-        cy.get('[class*=circle_default]').contains('1');
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleContentSelector).should('have.length', 3);
+        cy.get(circleDefaultSelector).contains('1');
 
-        cy.get('[data-testid="button-delete-head"]').click();
+        cy.get(buttonDeleteHeadSelector).click();
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class^="circle_circle"]').should('have.length', 2);
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleCircleSelector).should('have.length', 2);
 
     });
 
     it('should delete from tail correctly', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
 
-        cy.get('[data-testid="input"]').type('1');
-        cy.get('[data-testid="button-add-tail"]').click();
-        cy.get('[class*=circle_content]').should('contain', 'tail');
-        cy.get('[class*=circle_modified]').contains('1');
+        cy.get(inputSelector).type('1');
+        cy.get(buttonAddTailSelector).click();
+        cy.get(circleContentSelector).should('contain', 'tail');
+        cy.get(circleModifiedSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class*=circle_content]').should('have.length', 3);
-        cy.get('[class*=circle_default]').contains('1');
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleContentSelector).should('have.length', 3);
+        cy.get(circleDefaultSelector).contains('1');
 
-        cy.get('[data-testid="button-delete-tail"]').click();
+        cy.get(buttonDeleteTailSelector).click();
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class^="circle_circle"]').should('have.length', 2);
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleCircleSelector).should('have.length', 2);
 
     });
 
     it('should delete by index correctly', () => {
-        cy.visit('http://localhost:3000/list');
+        cy.visit('list');
 
-        cy.get('[data-testid="input"]').type('1');
-        cy.get('[data-testid="button-add-head"]').click();
+        cy.get(inputSelector).type('1');
+        cy.get(buttonAddHeadSelector).click();
 
-        cy.get('[data-testid="input"]').type('2');
-        cy.get('[data-testid="input-index"]').type('0');
-        cy.get('[data-testid="button-add-index"]').click();
-        cy.get('[class*=circle_content]').should('contain', 'head');
-        cy.get('[class*=circle_modified]').contains('1');
+        cy.get(inputSelector).type('2');
+        cy.get(inputIndexSelector).type('0');
+        cy.get(buttonAddIndexSelector).click();
+        cy.get(circleContentSelector).should('contain', 'head');
+        cy.get(circleModifiedSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class*=circle_content]').should('have.length', 3);
-        cy.get('[class*=circle_default]').contains('1');
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleContentSelector).should('have.length', 3);
+        cy.get(circleDefaultSelector).contains('1');
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
+        cy.wait(SHORT_DELAY_IN_MS);
 
-        cy.get('[class*=circle_content]')
+        cy.get(circleContentSelector)
             .should('have.length', 5)
             .each((el, index) => {
                 index === 2 && expect(el).contain('2');
                 index === 3 && expect(el).contain('1');
             });
 
-        cy.get('[data-testid="input-index"]').type('0');
-        cy.get('[data-testid="button-delete-index"]').click();
+        cy.get(inputIndexSelector).type('0');
+        cy.get(buttonDeleteIndexSelector).click();
 
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(500);
-        cy.get('[class*=circle_content]').should('have.length', 4);
-        cy.get('[class*=circle_default]').contains('1');
+
+        cy.wait(SHORT_DELAY_IN_MS);
+        cy.get(circleContentSelector).should('have.length', 4);
+        cy.get(circleDefaultSelector).contains('1');
     });
 });

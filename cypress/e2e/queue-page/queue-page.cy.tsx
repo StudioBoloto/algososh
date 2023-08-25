@@ -1,19 +1,27 @@
 /// <reference types="cypress" />
+import {SHORT_DELAY_IN_MS} from "../../../src/constants/delays";
+import {
+    buttonAddSelector, buttonClearSelector, buttonDeleteSelector,
+    circleCircleSelector,
+    circleContentSelector,
+    inputSelector
+} from "../../../src/constants/selectors";
+
 export {};
 
 describe('QueuePage e2e testing', () => {
     it('should disable button when input is empty', () => {
-        cy.visit('http://localhost:3000/queue');
+        cy.visit('queue');
 
-        cy.get('[data-testid="button-add"]').should('be.disabled');
+        cy.get(buttonAddSelector).should('be.disabled');
 
-        cy.get('[data-testid="input"]').type('1');
+        cy.get(inputSelector).type('1');
 
-        cy.get('[data-testid="button-add"]').should('not.be.disabled');
+        cy.get(buttonAddSelector).should('not.be.disabled');
     });
 
     it('should add correctly', () => {
-        cy.visit('http://localhost:3000/queue');
+        cy.visit('queue');
 
         const expectedStyles = [
             [{border: '4px solid rgb(210, 82, 225)'},
@@ -51,19 +59,18 @@ describe('QueuePage e2e testing', () => {
         ];
 
         for (let i = 0; i < expectedStyles.length; ++i) {
-            cy.get('[data-testid="input"]').type((i + 1).toString());
-            cy.get('[data-testid="button-add"]').click();
+            cy.get(inputSelector).type((i + 1).toString());
+            cy.get(buttonAddSelector).click();
 
-            cy.get('[class^="circle_circle"]').each((circle, index) => {
+            cy.get(circleCircleSelector).each((circle, index) => {
                 waitForStyleAndCheck(circle, i, index);
             });
 
-            cy.get('[class*=circle_content]').each((circle, index) => {
+            cy.get(circleContentSelector).each((circle, index) => {
                 waitForPointerAndCheck(circle, i, index);
             });
 
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
-            cy.wait(500);
+            cy.wait(SHORT_DELAY_IN_MS);
         }
 
         function waitForPointerAndCheck(circle: JQuery, i: number, index: number) {
@@ -81,7 +88,7 @@ describe('QueuePage e2e testing', () => {
             });
         }
 
-        cy.get('[class^="circle_circle"]').each((circle, index, list) => {
+        cy.get(circleCircleSelector).each((circle, index, list) => {
             if (index < expectedStyles.length) {
                 cy.wrap(circle).should('have.text', index + 1);
             } else {
@@ -93,7 +100,7 @@ describe('QueuePage e2e testing', () => {
     });
 
     it('should remove correctly', () => {
-        cy.visit('http://localhost:3000/queue');
+        cy.visit('queue');
 
         const expectedStyles = [
             [{border: '4px solid rgb(0, 50, 255)'},
@@ -134,18 +141,17 @@ describe('QueuePage e2e testing', () => {
         ];
 
         for (let i = 0; i < expectedStyles.length; ++i) {
-            cy.get('[data-testid="input"]').type((i + 1).toString());
-            cy.get('[data-testid="button-add"]').click();
+            cy.get(inputSelector).type((i + 1).toString());
+            cy.get(buttonAddSelector).click();
         }
 
         for (let i = 0; i < expectedStyles.length; ++i) {
-            cy.get('[data-testid="button-delete"]').click();
+            cy.get(buttonDeleteSelector).click();
 
-            cy.get('[class^="circle_circle"]').each((circle, index) => {
+            cy.get(circleCircleSelector).each((circle, index) => {
                 waitForStyleAndCheck(circle, i, index);
             });
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
-            cy.wait(500);
+            cy.wait(SHORT_DELAY_IN_MS);
         }
 
         function waitForStyleAndCheck(circle: JQuery, i: number, index: number) {
@@ -154,25 +160,24 @@ describe('QueuePage e2e testing', () => {
             });
         }
 
-         cy.get('[class^="circle_circle"]').should('have.text', '');
+         cy.get(circleCircleSelector).should('have.text', '');
     });
 
     it('should clear correctly', () => {
-        cy.visit('http://localhost:3000/queue');
+        cy.visit('queue');
 
-        cy.get('[data-testid="button-clear"]').should('be.disabled');
+        cy.get(buttonClearSelector).should('be.disabled');
 
         for (let i = 1; i < 4; ++i) {
-            cy.get('[data-testid="input"]').type(i.toString());
-            cy.get('[data-testid="button-add"]').click();
-            cy.get('[data-testid="button-clear"]').should('not.be.disabled');
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
-            cy.wait(500);
+            cy.get(inputSelector).type(i.toString());
+            cy.get(buttonAddSelector).click();
+            cy.get(buttonClearSelector).should('not.be.disabled');
+            cy.wait(SHORT_DELAY_IN_MS);
         }
-        cy.get('[data-testid="button-clear"]').click();
-        cy.get('[data-testid="button-clear"]').should('be.disabled');
+        cy.get(buttonClearSelector).click();
+        cy.get(buttonClearSelector).should('be.disabled');
 
-        cy.get('[class^="circle_circle"]').should('have.text', '');
+        cy.get(circleCircleSelector).should('have.text', '');
     });
 
 });

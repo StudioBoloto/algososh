@@ -6,6 +6,7 @@ import {Column} from "../ui/column/column";
 import {ElementStates} from "../../types/element-states";
 import {Direction} from "../../types/direction";
 import {generateRandomArray, sortArray} from "./utils";
+import {DELAY_IN_MS} from "../../constants/delays";
 
 export enum SortingTypes {
     selectionSort,
@@ -64,7 +65,7 @@ export const SortingPage: React.FC = () => {
                     callback();
                 }
             }, delay);
-            delay += 1000;
+            delay += DELAY_IN_MS;
         });
     };
 

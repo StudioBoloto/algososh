@@ -1,15 +1,18 @@
 /// <reference types="cypress" />
+import {DELAY_IN_MS} from "../../../src/constants/delays";
+import {buttonSelector, circleCircleSelector, inputSelector} from "../../../src/constants/selectors";
+
 export {};
 
 describe('FibonacciPage e2e testing', () => {
     it('should disable button when input is empty', () => {
-        cy.visit('http://localhost:3000/fibonacci');
+        cy.visit('fibonacci');
 
-        cy.get('[data-testid="button"]').should('be.disabled');
+        cy.get(buttonSelector).should('be.disabled');
 
-        cy.get('[data-testid="input"]').type('1');
+        cy.get(inputSelector).type('1');
 
-        cy.get('[data-testid="button"]').should('not.be.disabled');
+        cy.get(buttonSelector).should('not.be.disabled');
 
     });
 
@@ -20,19 +23,18 @@ describe('FibonacciPage e2e testing', () => {
             1597, 2584, 4181, 6765];
 
 
-        cy.visit('http://localhost:3000/fibonacci');
+        cy.visit('fibonacci');
 
-        cy.get('[data-testid="input"]').type(inputValue.toString());
+        cy.get(inputSelector).type(inputValue.toString());
 
-        cy.get('[data-testid="button"]').click();
+        cy.get(buttonSelector).click();
 
         for (let i = 0; i < inputValue; ++i) {
-            cy.get('[class^="circle_circle"]').as('circles');
+            cy.get(circleCircleSelector).as('circles');
             cy.get('@circles').each((circle) => {
                 waitForStyleAndCheck(circle);
             });
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
-            cy.wait(1000);
+            cy.wait(DELAY_IN_MS);
         }
 
         function waitForStyleAndCheck(circle: JQuery) {
@@ -41,7 +43,7 @@ describe('FibonacciPage e2e testing', () => {
             });
         }
 
-        cy.get('[class^="circle_circle"]').each((circle, index) => {
+        cy.get(circleCircleSelector).each((circle, index) => {
             cy.wrap(circle).should('have.text', outputValues[index].toString());
         });
 

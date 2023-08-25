@@ -5,6 +5,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {ElementStates} from "../../types/element-states";
 import {clear, dequeue, enqueue, INT_MAX, MAX_SIZE, Queue} from "./utils";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const QueuePage: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -61,7 +62,7 @@ export const QueuePage: React.FC = () => {
                 setCircleStates(stepStates);
                 setOutputArray(outputArrays[index]);
             }, delay);
-            delay += 500;
+            delay += SHORT_DELAY_IN_MS;
         });
     };
 

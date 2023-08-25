@@ -5,6 +5,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {ElementStates} from "../../types/element-states";
 import {handleClearStack, handlePopStack, handlePushStack, Stack} from "./utils";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const StackPage: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -59,7 +60,7 @@ export const StackPage: React.FC = () => {
                 setCircleStates(stepStates);
                 setOutputArray(outputArrays[index]);
             }, delay);
-            delay += 500;
+            delay += SHORT_DELAY_IN_MS;
         });
     };
 

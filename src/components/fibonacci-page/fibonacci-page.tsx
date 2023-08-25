@@ -4,6 +4,7 @@ import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {generateFibonacciSequences} from "./utils";
+import {DELAY_IN_MS} from "../../constants/delays";
 
 export const FibonacciPage: React.FC = () => {
     const [numberValue, setNumberValue] = useState<number | undefined>(undefined);
@@ -29,7 +30,7 @@ export const FibonacciPage: React.FC = () => {
             setTimeout(() => {
                 setOutputArray(state);
             }, delay);
-            delay += 1000;
+            delay += DELAY_IN_MS;
         });
     };
 

@@ -16,6 +16,7 @@ import {
     removeFromHead,
     removeFromTail
 } from "./utils";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export enum SmallCircleState {
     Visible = "visible",
@@ -89,7 +90,7 @@ export const ListPage: React.FC = () => {
                 }
 
             }, delay);
-            delay += 500;
+            delay += SHORT_DELAY_IN_MS;
         });
     };
 

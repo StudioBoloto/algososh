@@ -5,6 +5,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {ElementStates} from "../../types/element-states";
 import {getReversingStringSteps} from "./utils";
+import {DELAY_IN_MS} from "../../constants/delays";
 
 export const StringComponent: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -31,7 +32,7 @@ export const StringComponent: React.FC = () => {
                 setCircleStates(stepStates);
                 setInputValue(outputArray[index].join(""));
             }, delay);
-            delay += 1000;
+            delay += DELAY_IN_MS;
         });
     };
 

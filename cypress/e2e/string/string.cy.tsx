@@ -1,15 +1,18 @@
 /// <reference types="cypress" />
+import {DELAY_IN_MS} from "../../../src/constants/delays";
+import {buttonSelector, circleCircleSelector, inputSelector} from "../../../src/constants/selectors";
+
 export {};
 
 describe('StringComponent e2e testing', () => {
     it('should disable button when input is empty', () => {
-        cy.visit('http://localhost:3000/recursion');
+        cy.visit('recursion');
 
-        cy.get('[data-testid="button"]').should('be.disabled');
+        cy.get(buttonSelector).should('be.disabled');
 
-        cy.get('[data-testid="input"]').type('a');
+        cy.get(inputSelector).type('a');
 
-        cy.get('[data-testid="button"]').should('not.be.disabled');
+        cy.get(buttonSelector).should('not.be.disabled');
     });
 
     it('Should reverse string correctly and show animation', () => {
@@ -39,19 +42,18 @@ describe('StringComponent e2e testing', () => {
                 {border: '4px solid rgb(0, 50, 255)'},]
         ];
 
-        cy.visit('http://localhost:3000/recursion');
+        cy.visit('recursion');
 
-        cy.get('[data-testid="input"]').type(inputValue);
-        cy.get('[data-testid="button"]').click();
+        cy.get(inputSelector).type(inputValue);
+        cy.get(buttonSelector).click();
 
-        cy.get('[class^="circle_circle"]').as('circles');
+        cy.get(circleCircleSelector).as('circles');
 
         for (let i = 0; i < expectedStyles.length; ++i) {
             cy.get('@circles').each((circle, index) => {
                 waitForStyleAndCheck(circle, i, index);
             });
-            // eslint-disable-next-line cypress/no-unnecessary-waiting
-            cy.wait(1000);
+            cy.wait(DELAY_IN_MS);
         }
 
         function waitForStyleAndCheck(circle: JQuery, i: number, index: number) {
