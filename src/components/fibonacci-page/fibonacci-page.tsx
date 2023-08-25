@@ -37,8 +37,9 @@ export const FibonacciPage: React.FC = () => {
         <SolutionLayout title="Последовательность Фибоначчи">
             <div style={{marginRight: "auto", marginLeft: "auto", maxWidth: "522px"}}>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
-                    <Input maxLength={2} max={19} onChange={handleInputChange}/>
+                    <Input data-testid="input" maxLength={2} max={19} onChange={handleInputChange}/>
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button"
                             text={"Рассчитать"}
                             onClick={fibonacciAnimation}
                             disabled={!isValidInput}/>

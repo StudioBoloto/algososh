@@ -69,18 +69,21 @@ export const QueuePage: React.FC = () => {
         <SolutionLayout title="Очередь">
             <div style={{marginRight: "auto", marginLeft: "auto", maxWidth: "830px"}}>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
-                    <Input value={inputValue} maxLength={4} isLimitText={true} onChange={handleInputChange}/>
+                    <Input value={inputValue} data-testid="input" maxLength={4} isLimitText={true} onChange={handleInputChange}/>
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button-add"
                             text={"Добавить"}
                             onClick={handleEnqueue}
                             disabled={!isValidInput}
                     />
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button-delete"
                             text={"Удалить"}
                             onClick={handleDequeue}
                             disabled={isEmpty}
                     />
                     <Button style={{marginLeft: "80px"}}
+                            data-testid="button-clear"
                             text={"Очистить"}
                             onClick={handleClear}
                             disabled={isEmpty}

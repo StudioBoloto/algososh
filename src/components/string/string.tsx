@@ -23,7 +23,8 @@ export const StringComponent: React.FC = () => {
 
     const reverseAnimation = () => {
         const [animationStates, outputArray] = getReversingStringSteps(inputValue) as [ElementStates[][], string[][]];
-
+        console.log(animationStates)
+        console.log(outputArray)
         let delay = 0;
         animationStates.forEach((stepStates, index) => {
             setTimeout(() => {
@@ -38,9 +39,10 @@ export const StringComponent: React.FC = () => {
         <SolutionLayout title="Строка">
             <div style={{marginRight: "auto", marginLeft: "auto", maxWidth: "522px"}}>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
-                    <Input maxLength={11} isLimitText={true} onChange={handleInputChange}/>
+                    <Input data-testid="input" maxLength={11} isLimitText={true} onChange={handleInputChange}/>
                     <Button style={{marginLeft: "12px"}}
                             text={"Развернуть"}
+                            data-testid="button"
                             onClick={reverseAnimation}
                             disabled={!isValidInput}
                     />
@@ -55,8 +57,12 @@ export const StringComponent: React.FC = () => {
                 gap: "16px",
             }}>
                 {inputValue.split("").map((letter, index) => (
-                    <div key={index} style={{flexDirection: "row"}}>
-                        <Circle letter={letter} state={circleStates[index]}/>
+                    <div data-testid="circles" key={index} style={{flexDirection: "row"}}>
+                        <Circle
+                            letter={letter}
+                            state={circleStates[index]}
+                            data-testid={`circle-${index}`}
+                        />
                     </div>
                 ))}
             </div>
