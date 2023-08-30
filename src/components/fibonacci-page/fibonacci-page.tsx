@@ -4,6 +4,7 @@ import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {generateFibonacciSequences} from "./utils";
+import {DELAY_IN_MS} from "../../constants/delays";
 
 export const FibonacciPage: React.FC = () => {
     const [numberValue, setNumberValue] = useState<number | undefined>(undefined);
@@ -29,7 +30,7 @@ export const FibonacciPage: React.FC = () => {
             setTimeout(() => {
                 setOutputArray(state);
             }, delay);
-            delay += 1000;
+            delay += DELAY_IN_MS;
         });
     };
 
@@ -37,8 +38,9 @@ export const FibonacciPage: React.FC = () => {
         <SolutionLayout title="Последовательность Фибоначчи">
             <div style={{marginRight: "auto", marginLeft: "auto", maxWidth: "522px"}}>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
-                    <Input maxLength={2} max={19} onChange={handleInputChange}/>
+                    <Input data-testid="input" maxLength={2} max={19} onChange={handleInputChange}/>
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button"
                             text={"Рассчитать"}
                             onClick={fibonacciAnimation}
                             disabled={!isValidInput}/>

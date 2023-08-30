@@ -16,6 +16,7 @@ import {
     removeFromHead,
     removeFromTail
 } from "./utils";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export enum SmallCircleState {
     Visible = "visible",
@@ -89,7 +90,7 @@ export const ListPage: React.FC = () => {
                 }
 
             }, delay);
-            delay += 500;
+            delay += SHORT_DELAY_IN_MS;
         });
     };
 
@@ -224,6 +225,7 @@ export const ListPage: React.FC = () => {
             <div style={{marginRight: "auto", marginLeft: "auto", maxWidth: "952px"}}>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
                     <Input style={{width: "204px"}}
+                           data-testid="input"
                            placeholder={"Введите значения"}
                            value={inputValue}
                            maxLength={4}
@@ -231,24 +233,28 @@ export const ListPage: React.FC = () => {
                            onChange={handleInputValueChange}
                     />
                     <Button style={{marginLeft: "12px", minWidth: "180px"}}
+                            data-testid="button-add-head"
                             text={"Добавить в head"}
                             disabled={!isValidInput || (isAnimating && animationButton !== "addToHead")}
                             isLoader={(isAnimating && animationButton === "addToHead")}
                             onClick={handleAddToHead}
                     />
                     <Button style={{marginLeft: "12px", minWidth: "175px"}}
+                            data-testid="button-add-tail"
                             text={"Добавить в tail"}
                             disabled={!isValidInput || (isAnimating && animationButton !== "addToTail")}
                             isLoader={(isAnimating && animationButton === "addToTail")}
                             onClick={handleAddToTail}
                     />
                     <Button style={{marginLeft: "12px", minWidth: "180px"}}
+                            data-testid="button-delete-head"
                             text={"Удалить из head"}
                             disabled={isEmpty || (isAnimating && animationButton !== "removeFromHead")}
                             isLoader={(isAnimating && animationButton === "removeFromHead")}
                             onClick={handleRemoveFromHead}
                     />
                     <Button style={{marginLeft: "12px", minWidth: "175px"}}
+                            data-testid="button-delete-tail"
                             text={"Удалить из tail"}
                             disabled={isEmpty || (isAnimating && animationButton !== "removeFromTail")}
                             isLoader={(isAnimating && animationButton === "removeFromTail")}
@@ -257,18 +263,21 @@ export const ListPage: React.FC = () => {
                 </div>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
                     <Input style={{width: "204px"}}
+                           data-testid="input-index"
                            placeholder={"Введите индекс"}
                            value={inputIndex}
                            maxLength={1}
                            onChange={handleInputIndexChange}
                     />
                     <Button style={{marginLeft: "12px", minWidth: "366px"}}
+                            data-testid="button-add-index"
                             text={"Добавить по индексу"}
                             disabled={!isValidIndexInput || !isValidInput}
                             isLoader={(isAnimating && animationButton === "insertAtIndex")}
                             onClick={handleInsertAtIndex}
                     />
                     <Button style={{marginLeft: "12px", minWidth: "366px"}}
+                            data-testid="button-delete-index"
                             text={"Удалить по индексу"}
                             disabled={!isValidIndexInput || isEmpty}
                             isLoader={(isAnimating && animationButton === "removeAtIndex")}

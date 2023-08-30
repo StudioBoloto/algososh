@@ -1,10 +1,9 @@
-import {ElementStates} from "../../types/element-states";
+import { ElementStates } from "../../types/element-states";
 
 export const getReversingStringSteps = (sourceString: string) => {
     const inputArray: string[] = sourceString.split("");
     const outputArray: string[][] = [];
     const animationStates: ElementStates[][] = [];
-    const defaultStep = Array(sourceString.length).fill(ElementStates.Default);
     let stepStates: ElementStates[] = [];
 
     for (let i = 0; i < inputArray.length / 2; i++) {
@@ -15,6 +14,8 @@ export const getReversingStringSteps = (sourceString: string) => {
                     stepStates[index] = ElementStates.Modified;
                 }
             });
+        } else {
+            stepStates = Array(sourceString.length).fill(ElementStates.Default);
         }
 
         stepStates[i] = ElementStates.Changing;
@@ -35,7 +36,7 @@ export const getReversingStringSteps = (sourceString: string) => {
         }
     });
 
-    animationStates.push(defaultStep);
+    animationStates.push(Array(sourceString.length).fill(ElementStates.Default));
     outputArray.push(inputArray.slice());
 
     return [animationStates, outputArray];

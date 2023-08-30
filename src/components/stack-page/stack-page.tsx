@@ -5,6 +5,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {ElementStates} from "../../types/element-states";
 import {handleClearStack, handlePopStack, handlePushStack, Stack} from "./utils";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const StackPage: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -59,7 +60,7 @@ export const StackPage: React.FC = () => {
                 setCircleStates(stepStates);
                 setOutputArray(outputArrays[index]);
             }, delay);
-            delay += 500;
+            delay += SHORT_DELAY_IN_MS;
         });
     };
 
@@ -67,18 +68,21 @@ export const StackPage: React.FC = () => {
         <SolutionLayout title="Стек">
             <div style={{marginRight: "auto", marginLeft: "auto", maxWidth: "830px"}}>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
-                    <Input value={inputValue} maxLength={4} isLimitText={true} onChange={handleInputChange}/>
+                    <Input value={inputValue} data-testid="input" maxLength={4} isLimitText={true} onChange={handleInputChange}/>
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button-add"
                             text={"Добавить"}
                             onClick={handlePush}
                             disabled={!isValidInput}
                     />
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button-delete"
                             text={"Удалить"}
                             onClick={handlePop}
                             disabled={isEmpty}
                     />
                     <Button style={{marginLeft: "80px"}}
+                            data-testid="button-clear"
                             text={"Очистить"}
                             onClick={handleClear}
                             disabled={isEmpty}

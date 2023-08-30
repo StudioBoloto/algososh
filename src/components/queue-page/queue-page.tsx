@@ -5,6 +5,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {ElementStates} from "../../types/element-states";
 import {clear, dequeue, enqueue, INT_MAX, MAX_SIZE, Queue} from "./utils";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const QueuePage: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -61,7 +62,7 @@ export const QueuePage: React.FC = () => {
                 setCircleStates(stepStates);
                 setOutputArray(outputArrays[index]);
             }, delay);
-            delay += 500;
+            delay += SHORT_DELAY_IN_MS;
         });
     };
 
@@ -69,18 +70,21 @@ export const QueuePage: React.FC = () => {
         <SolutionLayout title="Очередь">
             <div style={{marginRight: "auto", marginLeft: "auto", maxWidth: "830px"}}>
                 <div style={{display: "flex", flexWrap: "nowrap"}}>
-                    <Input value={inputValue} maxLength={4} isLimitText={true} onChange={handleInputChange}/>
+                    <Input value={inputValue} data-testid="input" maxLength={4} isLimitText={true} onChange={handleInputChange}/>
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button-add"
                             text={"Добавить"}
                             onClick={handleEnqueue}
                             disabled={!isValidInput}
                     />
                     <Button style={{marginLeft: "12px"}}
+                            data-testid="button-delete"
                             text={"Удалить"}
                             onClick={handleDequeue}
                             disabled={isEmpty}
                     />
                     <Button style={{marginLeft: "80px"}}
+                            data-testid="button-clear"
                             text={"Очистить"}
                             onClick={handleClear}
                             disabled={isEmpty}
